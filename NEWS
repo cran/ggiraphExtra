@@ -1,0 +1,9 @@
+# ggiraphExtra 0.1.0
+====================
+(2016-12-1)
+
+* new function "ggAncova","ggBar","ggBoxplot","ggCatepillar",
+  "ggChoropleth","ggCLE","ggDot","ggEffect","ggErrorBar","ggHeatmap","ggHSD","ggPair",
+  "ggPieDonut","ggPoints","ggRadar","ggRose","ggSpine","summarySE" added
+
+* new data "browsers", "rose", "taco" added
