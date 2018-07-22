@@ -1,8 +1,10 @@
-#'The radar coordinate system is a modification of polar coordinate system, commly used for radar chart
+#'The radar coordinate system is a modification of polar coordinate system, commonly used for radar chart
 #'
 #'@param theta variable to map angle to (x or y)
 #'@param start offset of starting point from 12 o'clock in radians
 #'@importFrom ggplot2 ggproto
+#'
+#'@export
 #'@param direction 1, clockwise; -1, counterclockwise
 coord_radar <- function (theta = "x", start = 0, direction = 1)
 {
@@ -37,6 +39,52 @@ rescale_df=function(data,groupvar=NULL){
 }
 
 
+#' extract variable name from mapping, aes
+#' @param mapping aesthetic mapping
+#' @param varname variable name to extract
+#' @return variable name in character
+#' @importFrom stringr str_replace_all str_detect str_split fixed
+#' @importFrom utils packageVersion
+#' @export
+#' @examples
+#' require(ggplot2)
+#' mapping=aes(colour=sex)
+#' mapping=aes(x=c(Sepal.Length,Sepal.Width,Petal.Length,Petal.Width))
+#' getMapping(mapping,"colour")
+#' getMapping(mapping,"x")
+getMapping=function(mapping,varname) {
+
+        # mapping=aes(colour=sex)
+        # varname="x"
+             # mapping=aes(colour=am,facet=cyl);varname=c("colour","facet")
+
+        if(is.null(mapping)) return(NULL)
+        result=paste(mapping[varname])
+        result
+        if(length(result)==1){
+        if(result=="NULL") result<-NULL
+        } else{
+        for(i in 1:length(result)){
+                if(result[i]=="NULL") result[i]<-NULL
+        }
+        }
+        if(!is.null(result)){
+                if(packageVersion("ggplot2") > "2.2.1") {
+                        result=stringr::str_replace_all(result,"~","")
+                }
+                        result=stringr::str_replace_all(result,stringr::fixed("c("),"")
+                        result=stringr::str_replace_all(result,stringr::fixed(")"),"")
+                        result=stringr::str_replace_all(result," ","")
+                        # res=c()
+                        # if(stringr::str_detect(result,",")) {
+                                result=unlist(stringr::str_split(result,","))
+                        # }
+
+        }
+        result
+}
+
+
 #'Draw a radar chart
 #'
 #'@param data A data.frame
@@ -48,11 +96,15 @@ rescale_df=function(data,groupvar=NULL){
 #'@param size  Point size
 #'@param ylim A numeric vector of length 2, giving the y coordinates ranges.
 #'@param interactive A logical value. If TRUE, an interactive plot will be returned
+#'@param scales should Scales be fixed ("fixed", the default), free ("free"), or free in one dimension ("free_x", "free_y")
+#'@param use.label Logical. Whether or not use column label
 #'@param ... other arguments passed on to geom_point
 #'@importFrom reshape2 melt
 #'@importFrom plyr ddply summarize
 #'@importFrom ggiraph geom_polygon_interactive geom_point_interactive
 #'@importFrom ggplot2 expand_limits theme xlab ylab
+#'@importFrom stringr str_replace
+#'@importFrom sjlabelled get_label
 #'@return An interactive radar plot
 #'@export
 #'@examples
@@ -60,9 +112,13 @@ rescale_df=function(data,groupvar=NULL){
 #'require(ggiraph)
 #'require(plyr)
 #'require(reshape2)
+#'require(moonBook)
+#'require(sjmisc)
 #'ggRadar(data=iris,aes(group=Species))
 #'ggRadar(data=mtcars,interactive=TRUE)
-#'ggRadar(data=mtcars,aes(colour=am),interactive=TRUE)
+#'ggRadar(data=mtcars,aes(colour=am,facet=cyl),interactive=TRUE)
+#'ggRadar(data=acs,aes(colour=Dx,facet=Dx))
+#'ggRadar(iris,aes(x=c(Sepal.Length,Sepal.Width,Petal.Length,Petal.Width)))
 ggRadar=function(data,mapping=NULL,
                  rescale=TRUE,
                  legend.position="top",
@@ -70,41 +126,69 @@ ggRadar=function(data,mapping=NULL,
                  alpha=0.3,
                  size=3,
                  ylim=NULL,
+                 scales="fixed",
+                 use.label=FALSE,
                  interactive=FALSE,...){
 
-        # mapping=aes(fill=am)
-        # mapping=NULL
+        # data=iris;mapping=aes(group=Species);interactive=TRUE
+        # rescale=TRUE;
+        # legend.position="top";
+        # colour="red";
+        # alpha=0.3;
+        # size=3;
+        # ylim=NULL;
+        # scales="fixed";
+        # use.label=FALSE;
 
+
+        data=as.data.frame(data)
         (groupname=setdiff(names(mapping),c("x","y")))
-
-        if(is.null(groupname)) {
+        # length(groupname)
+        groupname
+        mapping
+        length(groupname)
+        if(length(groupname)==0) {
                 groupvar<-NULL
         } else {
-                (groupvar=paste(mapping[groupname]))
+                groupvar=getMapping(mapping,groupname)
         }
-        if(length(groupvar)>1) warning("Only one grouping variable is allowed")
+        groupvar
+        facetname<-colorname<-NULL
+        if ("facet" %in% names(mapping)){
+                facetname <- getMapping(mapping,"facet")
+        }
+        (colorname=setdiff(groupvar,facetname))
+
+        if((length(colorname)==0) &!is.null(facetname)) colorname<-facetname
+        #if(length(groupvar)>1) warning("Only one grouping variable is allowed")
         data=num2factorDf(data,groupvar)
 
         (select=sapply(data,is.numeric))
 
-        if(length(paste0(mapping[["x"]]))==0) {
-                xvars=colnames(data)[select]
-        } else {
-                xvars=paste0(mapping[["x"]])
-                if(length(xvars)>1) xvars<-xvars[-1]
+        if("x" %in% names(mapping)) {
+                xvars=getMapping(mapping,"x")
+                xvars
+                #if(length(xvars)>1) xvars<-xvars[-1]
                 if(length(xvars)<3) warning("At least three variables are required")
+
+        } else {
+                xvars=colnames(data)[select]
         }
 
         (xvars=setdiff(xvars,groupvar))
 
+if(rescale) data=rescale_df(data,groupvar)
 
-        if(rescale) data=rescale_df(data,groupvar)
-        data
+        temp=sjlabelled::get_label(data)
+        cols=ifelse(temp=="",colnames(data),temp)
+
         if(is.null(groupvar)) {
-                data$id=1
+                id=newColName(data)
+                data[[id]]=1
 
-                longdf=reshape2::melt(data,id.vars="id",measure.vars=xvars)
+                longdf=reshape2::melt(data,id.vars=id,measure.vars=xvars)
         } else{
+                cols=setdiff(cols,groupvar)
                 longdf=reshape2::melt(data,id.vars=groupvar,measure.vars=xvars)
         }
         #summary(longdf)
@@ -113,34 +197,53 @@ ggRadar=function(data,mapping=NULL,
         df=eval(parse(text=temp))
 
         colnames(df)[length(df)]="value"
-
+        df
+        groupvar
         if(is.null(groupvar)){
-                df$id2="all"
-                df$id=1:nrow(df)
+                id2=newColName(df)
+                df[[id2]]="all"
+                id3=newColName(df)
+                df[[id3]]=1:nrow(df)
                 df$tooltip=paste0(df$variable,"=",round(df$value,1))
                 df$tooltip2=paste0("all")
                 #str(df)
                 p<-ggplot(data=df,aes_string(x="variable",y="value",group=1))+
                         geom_polygon_interactive(aes_string(tooltip="tooltip2"),colour=colour,fill=colour,alpha=alpha)+
-                        geom_point_interactive(aes_string(data_id="id",tooltip="tooltip"),colour=colour,size=size,...)
+                        geom_point_interactive(aes_string(data_id=id3,tooltip="tooltip"),colour=colour,size=size)
+                        # geom_point_interactive(aes_string(data_id=id3,tooltip="tooltip"),colour=colour,size=size,...)
         } else{
-                df$id2=df[[groupvar]]
-                df$id=1:nrow(df)
-                df$tooltip=paste0(groupvar,"=",df[[groupvar]],"<br>",df$variable,"=",round(df$value,1))
-                df$tooltip2=paste0(groupvar,"=",df[[groupvar]])
+
+                if(!is.null(colorname)){
+                        id2=newColName(df)
+                        df[[id2]]=df[[colorname]]
+                }
+                id3=newColName(df)
+                df[[id3]]=1:nrow(df)
+                df$tooltip=paste0(groupvar,"=",df[[colorname]],"<br>",df$variable,"=",round(df$value,1))
+                df$tooltip2=paste0(groupvar,"=",df[[colorname]])
                 #str(df)
-                p<-ggplot(data=df,aes_string(x="variable",y="value",colour=groupvar,fill=groupvar,group=groupvar))+
+                p<-ggplot(data=df,aes_string(x="variable",y="value",colour=colorname,fill=colorname,group=colorname))+
                         geom_polygon_interactive(aes_string(tooltip="tooltip2"),alpha=alpha)+
-                        geom_point_interactive(aes_string(data_id="id",tooltip="tooltip"),size=size,...)
+                        geom_point_interactive(aes_string(data_id=id3,tooltip="tooltip"),size=size)
+                        # geom_point_interactive(aes_string(data_id=id3,tooltip="tooltip"),size=size,...)
+                # p<-ggplot(data=df,aes_string(x="variable",y="value",colour=colorname,fill=colorname,group=colorname))+
+                #         geom_polygon_interactive(aes_string(tooltip="tooltip2"),alpha=alpha)+
+                #         geom_point_interactive(aes_string(data_id=id3,tooltip="tooltip"),size=size)
 
         }
         p
-        p<- p+ xlab("")+ylab("")+theme(legend.position=legend.position)
+        if(!is.null(facetname)) {
+                formula1=as.formula(paste0("~",facetname))
+                p<-p+facet_wrap(formula1,scales=scales)
+        }
 
+        p<- p+ xlab("")+ylab("")+theme(legend.position=legend.position)
+        if(use.label) p<-p+scale_x_discrete(labels=cols)
         p<-p+coord_radar()
 
         if(!is.null(ylim)) p<-p+expand_limits(y=ylim)
 
+        p
         if(interactive){
                 tooltip_css <- "background-color:white;font-style:italic;padding:10px;border-radius:10px 20px 10px 20px;"
                 #hover_css="fill-opacity=.3;cursor:pointer;stroke:gold;"
@@ -151,3 +254,18 @@ ggRadar=function(data,mapping=NULL,
         }
         p
 }
+
+#' find new column name
+#' @param df a data.frame
+#' @export
+newColName=function(df){
+        temp="id"
+        no=0
+        while(1){
+                id=paste0(temp,no)
+                if(!(id %in% colnames(df))) return(id)
+                no=no+1
+        }
+}
+
+

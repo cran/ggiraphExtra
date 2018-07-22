@@ -6,7 +6,7 @@
 \usage{
 ggRadar(data, mapping = NULL, rescale = TRUE, legend.position = "top",
   colour = "red", alpha = 0.3, size = 3, ylim = NULL,
-  interactive = FALSE, ...)
+  scales = "fixed", use.label = FALSE, interactive = FALSE, ...)
 }
 \arguments{
 \item{data}{A data.frame}
@@ -25,6 +25,10 @@ ggRadar(data, mapping = NULL, rescale = TRUE, legend.position = "top",
 
 \item{ylim}{A numeric vector of length 2, giving the y coordinates ranges.}
 
+\item{scales}{should Scales be fixed ("fixed", the default), free ("free"), or free in one dimension ("free_x", "free_y")}
+
+\item{use.label}{Logical. Whether or not use column label}
+
 \item{interactive}{A logical value. If TRUE, an interactive plot will be returned}
 
 \item{...}{other arguments passed on to geom_point}
@@ -40,8 +44,11 @@ require(ggplot2)
 require(ggiraph)
 require(plyr)
 require(reshape2)
+require(moonBook)
+require(sjmisc)
 ggRadar(data=iris,aes(group=Species))
 ggRadar(data=mtcars,interactive=TRUE)
-ggRadar(data=mtcars,aes(colour=am),interactive=TRUE)
+ggRadar(data=mtcars,aes(colour=am,facet=cyl),interactive=TRUE)
+ggRadar(data=acs,aes(colour=Dx,facet=Dx))
+ggRadar(iris,aes(x=c(Sepal.Length,Sepal.Width,Petal.Length,Petal.Width)))
 }
-

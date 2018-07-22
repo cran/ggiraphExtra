@@ -5,7 +5,8 @@
 \title{Draw a cleveland dot plot}
 \usage{
 ggCLE(data, mapping, reorderByX = TRUE, no = NULL, start = 0.99,
-  interactive = FALSE, decreasing = TRUE, ...)
+  interactive = FALSE, decreasing = TRUE, use.label = TRUE,
+  use.labels = TRUE, ...)
 }
 \arguments{
 \item{data}{a data.frame}
@@ -22,6 +23,10 @@ ggCLE(data, mapping, reorderByX = TRUE, no = NULL, start = 0.99,
 
 \item{decreasing}{Should the sort order be increasing or decreasing?}
 
+\item{use.label}{Logical. Whether or not use column label in case of labelled data}
+
+\item{use.labels}{Logical. Whether or not use value labels in case of labelled data}
+
 \item{...}{other arguments passed on to geom_point_interactive}
 }
 \description{
@@ -30,13 +35,10 @@ Draw a cleveland dot plot
 \examples{
 require(ggplot2)
 require(ggiraph)
-mtcars$name=rownames(mtcars)
-ggCLE(data=mtcars,aes(x=mpg,y=name))
-ggCLE(data=mtcars,aes(x=mpg,y=name,color=am,facet=am),interactive=TRUE)
+ggCLE(data=mtcars,aes(x=mpg),decreasing=FALSE,interactive=TRUE)
+ggCLE(data=mtcars,aes(x=mpg,color=am,facet=am),interactive=TRUE)
 if(requireNamespace("gcookbook",quietly=TRUE)){
    require(gcookbook)
-   ggCLE(data=tophitters2001,aes(x=avg,y=name),no=20,interactive=TRUE)
-   ggCLE(data=tophitters2001,aes(x=avg,y=name,color=lg,facet=lg),no=20)
+   ggCLE(data=tophitters2001,aes(x=avg,y=name,color=lg,facet=lg),no=30,interactive=TRUE)
 }
 }
-

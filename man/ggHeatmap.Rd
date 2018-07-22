@@ -4,9 +4,10 @@
 \alias{ggHeatmap}
 \title{Make an interactive Heatmap}
 \usage{
-ggHeatmap(data, mapping, stat = "count", gradient_colors = c("white",
-  "steelblue"), addlabel = FALSE, polar = FALSE, interactive = FALSE,
-  yangle = 0, color = "black", size = 0.1, ...)
+ggHeatmap(data, mapping, stat = "count", palette = "Blues",
+  reverse = FALSE, addlabel = FALSE, polar = FALSE, interactive = FALSE,
+  yangle = 0, color = "grey50", size = 0.1, use.label = TRUE,
+  use.labels = TRUE, ...)
 }
 \arguments{
 \item{data}{A data.frame}
@@ -16,8 +17,9 @@ ggHeatmap(data, mapping, stat = "count", gradient_colors = c("white",
 \item{stat}{The statistical transformation to use on the data for this layer, as a string
 c("count","identity")}
 
-\item{gradient_colors}{A voector of color names used in function scale_fill_gradientn().
-Default value is c("white","steelblue")}
+\item{palette}{A palette name used for discrete fill var, Default value is "Blues"}
+
+\item{reverse}{If true, reverse palette colors}
 
 \item{addlabel}{A logical value. If TRUE, label will be added to the plot}
 
@@ -27,11 +29,15 @@ Default value is c("white","steelblue")}
 
 \item{yangle}{A integer. The value will be used adjust the angle of axis.text.y}
 
-\item{color}{Color argument passed on to geom_bar_interactive.}
+\item{color}{Color argument passed on to geom_rect_interactive.}
 
-\item{size}{Size argument passed on to geom_bar_interactive.}
+\item{size}{Size argument passed on to geom_rect_interactive.}
 
-\item{...}{other arguments passed on to geom_bar_interactive.}
+\item{use.label}{Logical. Whether or not use column label in case of labelled data}
+
+\item{use.labels}{Logical. Whether or not use value labels in case of labelled data}
+
+\item{...}{other arguments passed on to geom_rect_interactive.}
 }
 \value{
 An interactive barplot
@@ -43,8 +49,10 @@ Make an interactive Heatmap
 require(moonBook)
 require(ggplot2)
 require(ggiraph)
-ggHeatmap(acs,aes(x=Dx,y=smoking),addlabel=TRUE)
-ggHeatmap(rose,aes(x=Month,y=group,fill=value),stat="identity",gradient_colors = c("white","red"))
-ggHeatmap(taco,aes(x=AgeGroup,y=Filling,fill=Rating,facet=ShellType),stat="identity")
+require(sjmisc)
+ggHeatmap(acs,aes(x=Dx,y=smoking),addlabel=TRUE,interactive=TRUE)
+ggHeatmap(acs,aes(x=sex,y=Dx,fill=age),addlabel=TRUE,interactive=TRUE)
+ggHeatmap(rose,aes(x=Month,y=group,fill=value),stat="identity",addlabel=TRUE)
+ggHeatmap(rose,aes(x=Month,y=group,fill=value),addlabel=TRUE)
+ggHeatmap(taco,aes(x=AgeGroup,y=Filling,fill=Rating,facet=ShellType),color="grey50",stat="identity")
 }
-

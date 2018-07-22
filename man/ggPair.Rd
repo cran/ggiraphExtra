@@ -4,19 +4,30 @@
 \alias{ggPair}
 \title{Make an interactive scatter and line plot}
 \usage{
-ggPair(data, mapping = NULL, idcolor = TRUE, horizontal = FALSE,
-  interactive = FALSE)
+ggPair(data, mapping = NULL, rescale = FALSE, idcolor = TRUE,
+  horizontal = FALSE, use.label = FALSE, use.labels = TRUE,
+  includeFactor = TRUE, includeAll = FALSE, interactive = FALSE)
 }
 \arguments{
 \item{data}{a data.frame}
 
 \item{mapping}{Set of aesthetic mappings created by aes or aes_.}
 
-\item{idcolor}{Logical cvalue. If TRUE, row numbers uses as a color variable}
+\item{rescale}{if true, rescale the data.frame}
 
-\item{horizontal}{Logical cvalue. If TRUE, coord_flip() function is used to make a horizontal plot}
+\item{idcolor}{Logical. If TRUE, row numbers uses as a color variable}
 
-\item{interactive}{Logical cvalue. If TRUE, an interactive plot using ggiraph() function will be returned}
+\item{horizontal}{Logical. If TRUE, coord_flip() function is used to make a horizontal plot}
+
+\item{use.label}{Logical. Whether or not use column label in case of labelled data}
+
+\item{use.labels}{Logical. Whether or not use value labels in case of labelled data}
+
+\item{includeFactor}{Logical. Whether or not include factor variables}
+
+\item{includeAll}{Logical. Whether or not include all variables}
+
+\item{interactive}{Logical. If TRUE, an interactive plot using ggiraph() function will be returned}
 }
 \description{
 Make an interactive scatter and line plot
@@ -24,11 +35,13 @@ Make an interactive scatter and line plot
 \examples{
 require(ggplot2)
 require(ggiraph)
-ggPair(iris,interactive=TRUE)
-ggPair(iris[3:5],interactive=TRUE)
-ggPair(iris,aes(color=Species),interactive=TRUE)
-ggPair(iris,aes(color=Species),horizontal=TRUE, interactive=TRUE)
-ggPair(iris,aes(x=c(Sepal.Length,Sepal.Width)),interactive=TRUE)
-ggPair(iris,aes(x=c(Sepal.Length,Sepal.Width),color=Species),interactive=TRUE)
+require(sjmisc)
+require(moonBook)
+ggPair(iris,rescale=TRUE,horizontal=TRUE)
+ggPair(acs,aes(colour=smoking),horizontal=TRUE,rescale=TRUE)
+ggPair(radial,aes(color=male),horizontal=TRUE,rescale=TRUE)
+ggPair(mtcars,horizontal=TRUE,rescale=TRUE)
+ggPair(iris,rescale=TRUE,horizontal=TRUE,interactive=TRUE)
+ggPair(iris,aes(color=Species),rescale=TRUE,interactive=TRUE)
+ggPair(iris,aes(x=c(Sepal.Length,Sepal.Width),color=Species),horizontal=TRUE,interactive=TRUE)
 }
-

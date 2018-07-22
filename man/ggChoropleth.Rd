@@ -4,8 +4,8 @@
 \alias{ggChoropleth}
 \title{Draw an interactive choropleth map}
 \usage{
-ggChoropleth(data, mapping, map, colors = c("white", "orange", "red"),
-  palette = NULL, title = "", digits = 1, interactive = FALSE, ...)
+ggChoropleth(data, mapping, map, palette = "OrRd", reverse = FALSE,
+  color = "grey50", title = "", digits = 1, interactive = FALSE, ...)
 }
 \arguments{
 \item{data}{a data.frame}
@@ -14,9 +14,11 @@ ggChoropleth(data, mapping, map, colors = c("white", "orange", "red"),
 
 \item{map}{a map maybe a result of map_data()}
 
-\item{colors}{A vector of colours used as a parameter of scale_fill_gradientn()}
+\item{palette}{A palette name used for discrete fill var, Default value is "OrRd"}
 
-\item{palette}{A palette name used for discrete fill var}
+\item{reverse}{If true, reverse palette colors}
+
+\item{color}{A name of color of polygon, Default value is "grey50"}
 
 \item{title}{A title}
 
@@ -35,9 +37,10 @@ Draw an interactive choropleth map
 #require(ggiraph)
 #require(maps)
 #require(mapproj)
+#require(reshape2)
+#require(RColorBrewer)
 #states_map <- map_data("state")
 #ggChoropleth(crimes,aes(fill=Murder,map_id=state),map=states_map,interactive=TRUE)
 #ggChoropleth(crimes,aes(fill=c(Murder,Rape),map_id=state),map=states_map,interactive=TRUE)
-#ggChoropleth(crimes,aes(map_id=state),map=states_map,interactive=TRUE)
+#ggChoropleth(crimes,aes(map_id=state),map=states_map,palette="OrRd",interactive=TRUE)
 }
-

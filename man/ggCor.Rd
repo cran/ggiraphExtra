@@ -4,11 +4,14 @@
 \alias{ggCor}
 \title{Draw a heatmap of correlation test}
 \usage{
-ggCor(data, label = 0, colors = NULL, title = FALSE,
-  interactive = FALSE, ...)
+ggCor(data, what = 1, label = 0, colors = NULL, title = TRUE,
+  mode = 2, digits = 2, interactive = FALSE, yreverse = TRUE,
+  xangle = 45, yangle = 0, use.label = FALSE, ...)
 }
 \arguments{
 \item{data}{A data.frame}
+
+\item{what}{if 1, correlation, if 2, partial correlation, if 3, semi-partial correlation}
 
 \item{label}{if 0, no label(default), if 1, use r value as label, if 2, use r value with significant mark as label}
 
@@ -16,7 +19,19 @@ ggCor(data, label = 0, colors = NULL, title = FALSE,
 
 \item{title}{if true, add title to the heatmap}
 
+\item{mode}{1 or 2}
+
+\item{digits}{The number of decimal place}
+
 \item{interactive}{A logical value. If TRUE, an interactive plot will be returned}
+
+\item{yreverse}{If true, reverse y axis}
+
+\item{xangle}{x-axis text angle}
+
+\item{yangle}{y-axis text angle}
+
+\item{use.label}{Logical whether or not use label in case of labelled data}
 
 \item{...}{further arguments to be passed to cor.test}
 }
@@ -27,9 +42,11 @@ Draw a heatmap of correlation test
 require(mycor)
 require(ggplot2)
 require(ggiraph)
-ggCor(iris)
-ggCor(iris,label=2,interactive=TRUE)
+require(ppcor)
+ggCor(iris,digits=3,label=3)
+ggCor(iris,what=3,digits=3,label=3)
+ggCor(iris,label=3,interactive=TRUE)
 ggCor(mtcars,interactive=TRUE)
+ggCor(mtcars,mode=2,interactive=TRUE)
 ggCor(iris,method="pearson",interactive=TRUE)
 }
-

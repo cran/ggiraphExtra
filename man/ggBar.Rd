@@ -5,8 +5,9 @@
 \title{Draw an interactive barplot}
 \usage{
 ggBar(data, mapping, stat = "count", position = "stack", palette = NULL,
-  width = NULL, digits = 1, horizontal = FALSE, yangle = 0,
-  addlabel = FALSE, polar = FALSE, interactive = FALSE, ...)
+  horizontal = FALSE, yangle = 0, xangle = 0, maxylev = 6,
+  addlabel = FALSE, labelsize = 5, polar = FALSE, reverse = FALSE,
+  use.label = TRUE, use.labels = TRUE, interactive = FALSE, ...)
 }
 \arguments{
 \item{data}{A data.frame}
@@ -20,17 +21,25 @@ c("count","identity")}
 
 \item{palette}{A character string indicating the color palette}
 
-\item{width}{Bar width}
-
-\item{digits}{integer indicating the number of decimal places}
-
 \item{horizontal}{A logical value. If TRUE,a horizontal bar plot will be returned}
 
-\item{yangle}{A integer. The value will be used adjust the angle of axis.text.y}
+\item{yangle}{An integer. The value will be used adjust the angle of axis.text.y}
+
+\item{xangle}{An integer. The value will be used adjust the angle of axis.text.x}
+
+\item{maxylev}{integer indicating threshold of unique value to be treated as a categorical variable}
 
 \item{addlabel}{A logical value. If TRUE, label will be added to the plot}
 
+\item{labelsize}{label size}
+
 \item{polar}{A logical value. If TRUE, coord_polar() function will be added}
+
+\item{reverse}{If true, reverse palette colors}
+
+\item{use.label}{Logical. Whether or not use column label in case of labelled data}
+
+\item{use.labels}{Logical. Whether or not use value labels in case of labelled data}
 
 \item{interactive}{A logical value. If TRUE, an interactive plot will be returned}
 
@@ -46,10 +55,11 @@ Draw an interactive barplot
 require(moonBook)
 require(ggplot2)
 require(ggiraph)
+require(plyr)
 ggBar(acs,aes(x=Dx,fill=smoking),interactive=TRUE,width=1,colour="white",size=0.2,polar=TRUE)
 ggBar(acs,aes(x=Dx,fill=smoking),position="fill",addlabel=TRUE,horizontal=TRUE,width=0.5)
-ggBar(acs,aes(x=Dx,fill=smoking),position="dodge",interactive=TRUE)
+ggBar(acs,aes(x=Dx,fill=smoking),position="dodge",interactive=TRUE,addlabel=TRUE)
+ggBar(acs,aes(x=Dx,fill=smoking),position="fill",addlabel=TRUE)
 ggBar(rose,aes(x=Month,fill=group,y=value),stat="identity",polar=TRUE,palette="Reds",width=1,
-      color="black",size=0.1,interactive=TRUE)
+      color="black",size=0.1,reverse=TRUE,interactive=TRUE)
 }
-

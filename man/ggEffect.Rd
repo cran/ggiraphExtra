@@ -9,7 +9,8 @@
 \usage{
 ggEffect(x, ...)
 
-\method{ggEffect}{default}(x, mapping, ...)
+\method{ggEffect}{default}(x, mapping, use.label = TRUE, use.labels = TRUE,
+  ...)
 
 \method{ggEffect}{formula}(x, data, ...)
 
@@ -23,6 +24,10 @@ ggEffect(x, ...)
 \item{...}{additional arguments passed to the generic function}
 
 \item{mapping}{Set of aesthetic mappings created by aes or aes_.}
+
+\item{use.label}{Logical. Whether or not use column label in case of labelled data}
+
+\item{use.labels}{Logical. Whether or not use value labels in case of labelled data}
 
 \item{data}{A data.frame}
 
@@ -54,13 +59,21 @@ Visualize the effect of interaction between two continuous independent variables
 
 \item \code{lm}: Visualize the effect of interaction between two continuous independent variables on a response variable
 }}
+
 \examples{
 require(ggplot2)
 require(ggiraph)
-ggEffect(mtcars,aes(x=wt,y=mpg,color=hp),use.rownames=TRUE,interactive=TRUE)
+ggEffect(mtcars,aes(x=wt,y=mpg,color=hp))
 require(moonBook)
-ggEffect(NTAV~age*smoking,data=radial,interactive=TRUE)
+ggEffect(acs,aes(x=height,y=weight,color=smoking))
+require(ggplot2)
+require(ggiraph)
+require(moonBook)
+ggEffect(NTAV~age*smoking,data=radial)
+require(moonBook)
+require(ggplot2)
+require(ggiraph)
 fit=lm(age~sex*smoking,data=acs)
 ggEffect(fit,interactive=TRUE)
+ggEffect(radial,aes(x=age,y=NTAV,group=smoking))
 }
-

@@ -5,8 +5,13 @@
 \title{Draw an interactive spinogram}
 \usage{
 ggSpine(data, mapping, stat = "count", position = "fill",
-  palette = "Blues", interactive = FALSE, polar = FALSE, width = NULL,
-  digits = 1, colour = "black", size = 0.2, addlabel = FALSE, ...)
+  palette = "Blues", interactive = FALSE, polar = FALSE,
+  reverse = FALSE, width = NULL, maxylev = 6, digits = 1,
+  colour = "black", size = 0.2, addlabel = TRUE, labelsize = 5,
+  minlabelgroup = 0.04, minlabel = 2, hide.legend = TRUE,
+  ylabelMean = FALSE, sec.y.axis = FALSE, use.label = TRUE,
+  use.labels = TRUE, labeller = NULL, facetbycol = TRUE, xangle = NULL,
+  yangle = NULL, xreverse = FALSE, yreverse = FALSE, ...)
 }
 \arguments{
 \item{data}{A data.frame}
@@ -24,7 +29,11 @@ c("count","identity")}
 
 \item{polar}{A logical value. If TRUE, coord_polar() function will be added}
 
+\item{reverse}{If true, reverse palette colors}
+
 \item{width}{Bar width}
+
+\item{maxylev}{integer indicating threshold of unique value to be treated as a categorical variable}
 
 \item{digits}{integer indicating the number of decimal places}
 
@@ -34,7 +43,35 @@ c("count","identity")}
 
 \item{addlabel}{A logical value. If TRUE, label will be added to the plot}
 
-\item{...}{other arguments passed on to layer.}
+\item{labelsize}{label size}
+
+\item{minlabelgroup}{minimal threshold of label group. Default is 0.04}
+
+\item{minlabel}{minimal threshold of label. Default is 2}
+
+\item{hide.legend}{A logical value. If TRUE, the legend is removed and y labels are recreated}
+
+\item{ylabelMean}{Logical. If TRUE, y axis labels are positioned at mean value.}
+
+\item{sec.y.axis}{Logical. If TRUE, secondary y axis is shown at the right side.}
+
+\item{use.label}{Logical. Whether or not use column label in case of labelled data}
+
+\item{use.labels}{Logical. Whether or not use value labels in case of labelled data}
+
+\item{labeller}{A function that takes one data frame of labels and returns a list or data frame of character vectors.}
+
+\item{facetbycol}{Logical. If TRUE, facet by column.}
+
+\item{xangle}{angle of axis label}
+
+\item{yangle}{angle of axis label}
+
+\item{xreverse}{Logical. Whether or not reverse x-axis}
+
+\item{yreverse}{Logical. Whether or not reverse y-axis}
+
+\item{...}{other arguments passed on to geom_rect_interactive.}
 }
 \value{
 An interactive spinogram
@@ -45,10 +82,17 @@ Draw an interactive spinogram
 \examples{
 require(moonBook)
 require(ggplot2)
-require(ggiraph)
-ggSpine(data=acs,aes(x=age,fill=smoking),interactive=TRUE)
-ggSpine(data=acs,aes(x=Dx,fill=smoking),addlabel=TRUE,interactive=TRUE)
-ggSpine(data=acs,aes(x=Dx,fill=smoking),position="dodge",addlabel=TRUE,interactive=TRUE)
-ggSpine(data=acs,aes(x=Dx,fill=smoking),position="stack",addlabel=TRUE,interactive=TRUE)
+acs$Dx=factor(acs$Dx,levels=c("Unstable Angina","NSTEMI","STEMI"))
+ggSpine(data=acs,aes(x=age,fill=Dx,facet=sex),palette="Reds")
+ggSpine(data=acs,aes(x=age,fill=Dx,facet=sex),facetbycol=FALSE,minlabelgroup=0.02)
+ggSpine(data=acs,aes(x=age,fill=Dx),palette="Reds")
+ggSpine(data=acs,aes(x=smoking,fill=Dx),palette="Reds")
+ggSpine(data=acs,aes(x=DM,fill=Dx,facet=sex),palette="Reds")
+ggSpine(data=acs,aes(x=Dx,fill=smoking,facet=sex),palette="Reds")
+ggSpine(data=acs,aes(x=DM,facet=smoking,fill=Dx),sec.y.axis=TRUE)
+ggSpine(data=acs,aes(x=DM,facet=smoking,fill=Dx),facetbycol=FALSE)
+ggSpine(mtcars,aes(x=gear,fill=carb))
+ggSpine(mtcars,aes(x=gear,fill=carb,facet=am))
+ggSpine(data=acs,aes(x=Dx,fill=smoking),position="dodge")
+ggSpine(data=acs,aes(x=Dx,fill=smoking),position="stack")
 }
-
