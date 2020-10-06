@@ -4,9 +4,18 @@
 \alias{ggPair}
 \title{Make an interactive scatter and line plot}
 \usage{
-ggPair(data, mapping = NULL, rescale = FALSE, idcolor = TRUE,
-  horizontal = FALSE, use.label = FALSE, use.labels = TRUE,
-  includeFactor = TRUE, includeAll = FALSE, interactive = FALSE)
+ggPair(
+  data,
+  mapping = NULL,
+  rescale = FALSE,
+  idcolor = TRUE,
+  horizontal = FALSE,
+  use.label = FALSE,
+  use.labels = TRUE,
+  includeFactor = TRUE,
+  includeAll = FALSE,
+  interactive = FALSE
+)
 }
 \arguments{
 \item{data}{a data.frame}
@@ -27,7 +36,7 @@ ggPair(data, mapping = NULL, rescale = FALSE, idcolor = TRUE,
 
 \item{includeAll}{Logical. Whether or not include all variables}
 
-\item{interactive}{Logical. If TRUE, an interactive plot using ggiraph() function will be returned}
+\item{interactive}{Logical. If TRUE, an interactive plot using girafe() function will be returned}
 }
 \description{
 Make an interactive scatter and line plot

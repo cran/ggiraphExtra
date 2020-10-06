@@ -1,7 +1,7 @@
 Package: ggiraphExtra
 Type: Package
 Title: Make Interactive 'ggplot2'. Extension to 'ggplot2' and 'ggiraph'
-Version: 0.2.9
+Version: 0.3.0
 Authors@R: person("Keon-Woong", "Moon", email = "cardiomoon@gmail.com",
                   role = c("aut", "cre"))
 Maintainer: Keon-Woong Moon <cardiomoon@gmail.com>
@@ -9,19 +9,18 @@ URL: https://github.com/cardiomoon/ggiraphExtra
 Depends: R (>= 2.10)
 Imports: ggplot2 (>= 2.2.0), ggiraph (>= 0.3.2), scales, reshape2,
         plyr, mycor, ppcor, grid, mgcv, sjlabelled, sjmisc, stringr,
-        webshot, tidyr, purrr, dplyr, magrittr, ggforce, ztable,
-        RColorBrewer
-Suggests: TH.data, moonBook, maps, gcookbook, knitr, rmarkdown,
-        testthat
+        tidyr, purrr, dplyr, magrittr, RColorBrewer
+Suggests: TH.data, ggforce, webshot, ztable, moonBook, maps, gcookbook,
+        knitr, rmarkdown, testthat
 Description: Collection of functions to enhance 'ggplot2' and 'ggiraph'. Provides functions for exploratory plots.
     All plot can be a 'static' plot or an 'interactive' plot using 'ggiraph'.
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 6.0.1
+RoxygenNote: 7.1.1
 VignetteBuilder: knitr
 NeedsCompilation: no
-Packaged: 2018-07-22 14:06:53 UTC; cardiomoon
+Packaged: 2020-10-06 06:38:43 UTC; cardiomoon
 Author: Keon-Woong Moon [aut, cre]
 Repository: CRAN
-Date/Publication: 2018-07-22 14:20:03 UTC
+Date/Publication: 2020-10-06 07:00:02 UTC

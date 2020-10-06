@@ -4,14 +4,40 @@
 \alias{ggSpine}
 \title{Draw an interactive spinogram}
 \usage{
-ggSpine(data, mapping, stat = "count", position = "fill",
-  palette = "Blues", interactive = FALSE, polar = FALSE,
-  reverse = FALSE, width = NULL, maxylev = 6, digits = 1,
-  colour = "black", size = 0.2, addlabel = TRUE, labelsize = 5,
-  minlabelgroup = 0.04, minlabel = 2, hide.legend = TRUE,
-  ylabelMean = FALSE, sec.y.axis = FALSE, use.label = TRUE,
-  use.labels = TRUE, labeller = NULL, facetbycol = TRUE, xangle = NULL,
-  yangle = NULL, xreverse = FALSE, yreverse = FALSE, ...)
+ggSpine(
+  data,
+  mapping,
+  stat = "count",
+  position = "fill",
+  palette = "Blues",
+  interactive = FALSE,
+  polar = FALSE,
+  reverse = FALSE,
+  width = NULL,
+  maxylev = 6,
+  digits = 1,
+  colour = "black",
+  size = 0.2,
+  addlabel = TRUE,
+  labelsize = 5,
+  minlabelgroup = 0.04,
+  minlabel = 2,
+  hide.legend = TRUE,
+  ylabelMean = FALSE,
+  sec.y.axis = FALSE,
+  use.label = TRUE,
+  use.labels = TRUE,
+  labeller = NULL,
+  facetbycol = TRUE,
+  xangle = NULL,
+  yangle = NULL,
+  xreverse = FALSE,
+  yreverse = FALSE,
+  xlab = NULL,
+  filllab = NULL,
+  family = NULL,
+  ...
+)
 }
 \arguments{
 \item{data}{A data.frame}
@@ -71,6 +97,12 @@ c("count","identity")}
 
 \item{yreverse}{Logical. Whether or not reverse y-axis}
 
+\item{xlab}{Label for x-axis}
+
+\item{filllab}{Label for fill aes}
+
+\item{family}{font family}
+
 \item{...}{other arguments passed on to geom_rect_interactive.}
 }
 \value{
@@ -91,7 +123,7 @@ ggSpine(data=acs,aes(x=DM,fill=Dx,facet=sex),palette="Reds")
 ggSpine(data=acs,aes(x=Dx,fill=smoking,facet=sex),palette="Reds")
 ggSpine(data=acs,aes(x=DM,facet=smoking,fill=Dx),sec.y.axis=TRUE)
 ggSpine(data=acs,aes(x=DM,facet=smoking,fill=Dx),facetbycol=FALSE)
-ggSpine(mtcars,aes(x=gear,fill=carb))
+ggSpine(mtcars,aes(x=gear,fill=carb),interactive=TRUE)
 ggSpine(mtcars,aes(x=gear,fill=carb,facet=am))
 ggSpine(data=acs,aes(x=Dx,fill=smoking),position="dodge")
 ggSpine(data=acs,aes(x=Dx,fill=smoking),position="stack")

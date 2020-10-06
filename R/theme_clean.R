@@ -1,5 +1,5 @@
 #'Clean theme for PieDonut plot
-#'@param base_size An interger, default 12.
+#'@param base_size An integer, default 12.
 #'@importFrom ggplot2 theme_grey %+replace%
 #'@importFrom grid unit
 #'@export
@@ -11,8 +11,8 @@ theme_clean=function(base_size=12){
                         panel.background=element_blank(),
                         panel.grid=element_blank(),
                         axis.ticks.length=unit(0,"cm"),
-                        axis.ticks.margin=unit(0,"cm"),
-                        panel.margin=unit(0,"lines"),
+                        # axis.text=element_text(margin=margin(0,0,0,0,"pt")),
+                        panel.spacing=unit(0,"lines"),
                         plot.margin=unit(c(0,0,0,0),"lines"),
                         complete=TRUE
                 )
